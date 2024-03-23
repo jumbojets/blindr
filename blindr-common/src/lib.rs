@@ -27,6 +27,15 @@ pub struct Constraint {
     pub withdrawal_limit: u64
 }
 
+impl Constraint {
+    pub fn hash(&self) -> risc0_zkvm::sha::Digest {
+        use sha2::{Digest as _, Sha256};
+        let constraint_string = serde_json::to_string(self).unwrap();
+        let hashed_constraint = Sha256::digest(&constraint_string.as_bytes());
+        risc0_zkvm::sha::Digest::try_from(hashed_constraint.as_slice()).unwrap()
+    }
+}
+
 // {
 //     "auth": [
 //       {"password" : "hello123"},

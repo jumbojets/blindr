@@ -6,7 +6,9 @@ use blindr_common::{Transaction, Auth, Constraint};
 
 type BlindedMessage = ();
 
-pub fn prove(message: &Transaction, auth: &Auth, constraint: &Constraint) -> (Receipt, BlindedMessage, Digest) {
+type Hash = [u8; 32];
+
+pub fn prove(message: &Transaction, auth: &Auth, constraint: &Constraint) -> (Receipt, BlindedMessage, Hash) {
     let env = ExecutorEnv::builder()
         .write(&message)
         .unwrap()
@@ -21,7 +23,9 @@ pub fn prove(message: &Transaction, auth: &Auth, constraint: &Constraint) -> (Re
 
     let receipt = prover.prove(env, MULTIPLY_ELF).unwrap();
 
-    let (blinded_message, hashed_constraint) = receipt.journal.decode().unwrap();
+    let (blinded_message, hashed_constraint): (_, Digest) = receipt.journal.decode().unwrap();
+
+    let hashed_constraint = hashed_constraint.as_bytes().try_into().unwrap();
 
     (receipt, blinded_message, hashed_constraint)
 }
