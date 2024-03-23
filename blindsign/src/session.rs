@@ -11,7 +11,7 @@ use Error::WiredScalarMalformed;
 /// For managing the signer side response to incoming requests for blind
 /// signatures. How the actual requests come in is orthogonal to this crate.
 pub struct BlindSession {
-    k: Scalar,
+    pub k: Scalar,
 }
 
 impl BlindSession {
@@ -63,7 +63,7 @@ impl BlindSession {
     /// * S' = Xs*e' + k
     /// * e' = requester calculated e' value, received by signer
     /// * k  = randomly generated number by the signer
-    pub fn sign_ep(self, ep: &[u8; 32], xs: Scalar) -> ::Result<[u8; 32]> {
+    pub fn sign_ep(&self, ep: &[u8; 32], xs: Scalar) -> ::Result<[u8; 32]> {
         Ok(
             (xs * Scalar::from_canonical_bytes(*ep).ok_or(WiredScalarMalformed)? + self.k)
                 .to_bytes(),

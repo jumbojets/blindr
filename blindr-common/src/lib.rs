@@ -8,6 +8,10 @@ pub struct Transaction {
 }
 
 impl Transaction {
+    pub fn from_str(s: &str) -> Self {
+        serde_json::from_str(s).unwrap()
+    }
+
     pub fn message(&self) -> Vec<u8> {
         serde_json::to_string(&self).unwrap().as_bytes().to_vec()
     }
@@ -17,6 +21,10 @@ impl Transaction {
 pub struct Auth(pub Vec<(String, String)>);
 
 impl Auth {
+    pub fn from_str(s: &str) -> Self {
+        serde_json::from_str(s).unwrap()
+    }
+
     pub fn verify(&self, against: &Auth) -> bool {
         for (name, field) in &self.0 {
             if !against.0.iter().any(|(a_name, a_field)| a_name == name && a_field == field) {
@@ -34,6 +42,10 @@ pub struct Constraint {
 }
 
 impl Constraint {
+    pub fn from_str(s: &str) -> Self {
+        serde_json::from_str(s).unwrap()
+    }
+
     pub fn hash(&self) -> risc0_zkvm::sha::Digest {
         use sha2::{Digest as _, Sha256};
         let constraint_string = serde_json::to_string(self).unwrap();

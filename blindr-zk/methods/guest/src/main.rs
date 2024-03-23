@@ -21,7 +21,7 @@ fn main() {
 
     // compute the blinded_message
     let message = transaction.message();
-    let (blinded_message, _) = BlindRequest::new_specific_msg::<_>(&public_value, &message).unwrap();
+    let (blinded_message, _) = BlindRequest::new_specific_msg(&public_value, &message).unwrap();
 
     // hash the constraint
     let hashed_constraint = constraint.hash();

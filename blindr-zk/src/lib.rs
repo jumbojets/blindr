@@ -30,6 +30,6 @@ pub fn prove(message: &Transaction, auth: &Auth, constraint: &Constraint) -> (Re
     (receipt, blinded_message, hashed_constraint)
 }
 
-pub fn verify(receipt: &Receipt) { // TODO: dont we need blinded message and hashed constraint?
-    receipt.verify(MULTIPLY_ID).expect("Code you have proven should successfully verify; did you specify the correct image ID?");
+pub fn verify(receipt: &Receipt) -> bool { // TODO: dont we need blinded message and hashed constraint?
+    receipt.verify(MULTIPLY_ID).is_ok()
 }

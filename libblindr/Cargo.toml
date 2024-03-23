@@ -3,6 +3,25 @@ name = "libblindr"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "libblindr"
+crate-type = ["cdylib"]
 
 [dependencies]
+blindsign = { path = "../blindsign" }
+hex = "*"
+blindr-common = { path = "../blindr-common" }
+blindr-zk-driver = { path = "../blindr-zk" }
+bincode = "*"
+base64 = "0.22.0"
+
+[dependencies.pyo3]
+version = "0.20"
+features = ["extension-module"]
+
+[dependencies.curve25519-dalek]
+# version = "^0.17"
+version = "*"
+# features = ["nightly", "u32_backend"]
+features = ["u32_backend"]
+default-features = false
