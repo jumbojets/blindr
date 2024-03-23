@@ -1,0 +1,16 @@
+[package]
+name = "hello-world"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hello-world-methods = { path = "methods" }
+risc0-zkvm = "0.21.0"
+serde = "1.0"
+blindr-common = { path = "../blindr-common" }
+
+[features]
+cuda = ["risc0-zkvm/cuda"]
+default = []
+metal = ["risc0-zkvm/metal"]
+prove = ["risc0-zkvm/prove"]
