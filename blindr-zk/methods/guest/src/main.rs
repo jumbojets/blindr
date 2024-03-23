@@ -3,23 +3,25 @@
 
 use risc0_zkvm::guest::env;
 use blindr_common::{Transaction, Auth, Constraint};
+use blindsign::request::BlindRequest;
 
 // risc0_zkvm::guest::entry!(main);
 
 fn main() {
-    let (message, auth, constraint): (Transaction, Auth, Constraint) = env::read();
+    let (transaction, auth, constraint, public_value): (Transaction, Auth, Constraint, [u8; 32]) = env::read();
 
     // check that message fits constraint
     if !constraint.auth.verify(&auth) {
         panic!("auth doesnt match");
     }
 
-    if message.amount > constraint.withdrawal_limit {
+    if transaction.amount > constraint.withdrawal_limit {
         panic!("bad withdrawal limit");
     }
 
     // compute the blinded_message
-    let blinded_message = todo!();
+    let message = transaction.message();
+    let (blinded_message, _) = BlindRequest::new_specific_msg::<_>(&public_value, &message).unwrap();
 
     // hash the constraint
     let hashed_constraint = constraint.hash();

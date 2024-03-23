@@ -7,6 +7,12 @@ pub struct Transaction {
     pub amount: u64,
 }
 
+impl Transaction {
+    pub fn message(&self) -> Vec<u8> {
+        serde_json::to_string(&self).unwrap().as_bytes().to_vec()
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Auth(pub Vec<(String, String)>);
 
