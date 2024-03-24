@@ -32,8 +32,12 @@ try:
 	# current_session = my_client.restart_session_with_hash(constraint)
 
 	signature = my_client.sign_message(message, current_session['public_value'], current_session['public_key'], constraint)
+	if my_client.delete_key(constraint):
+		print("Deleted key")
+	
 except:
-	print(my_client.delete_key(constraint))
+	if my_client.delete_key(constraint):
+		print("Deleted key")
 
 
 
