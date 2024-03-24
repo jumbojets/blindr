@@ -901,6 +901,7 @@ dependencies = [
  "curve25519-dalek",
  "hex",
  "pyo3",
+ "pyo3-build-config",
 ]
 
 [[package]]
@@ -2324,3 +2325,18 @@ dependencies = [
  "quote",
  "syn 2.0.53",
 ]
+
+[[patch.unused]]
+name = "risc0-binfmt"
+version = "0.21.0-alpha.1"
+source = "git+https://github.com/l2iterative/risc0/?branch=no-rust-runtime-for-host#c4946a8a9089ca79ea4c46f1e46ae723fbcfa5e1"
+
+[[patch.unused]]
+name = "risc0-build"
+version = "0.21.0-alpha.1"
+source = "git+https://github.com/l2iterative/risc0/?branch=no-rust-runtime-for-host#c4946a8a9089ca79ea4c46f1e46ae723fbcfa5e1"
+
+[[patch.unused]]
+name = "risc0-zkvm"
+version = "0.21.0-alpha.1"
+source = "git+https://github.com/l2iterative/risc0/?branch=no-rust-runtime-for-host#c4946a8a9089ca79ea4c46f1e46ae723fbcfa5e1"
