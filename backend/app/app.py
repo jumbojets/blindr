@@ -15,12 +15,13 @@ app.config['SECRET_KEY'] = config('SECRET_KEY')
 def generate_keypair():
     data = request.json
     constraint_hash = data.get('constraint_hash')
+    permanent_entry = find_permanent(constraint_hash)
+    if permanent_entry:
+        return jsonify(public_key=permanent_entry.public_key)
+    
     private_key, public_key = server_generate_keypair()
     # private_key = 'private_key1'
     # public_key = 'public_key1'
-
-    if find_permanent(constraint_hash):
-        return jsonify(error="Constraint hash already exists"), 400
     # Store keys in a way that suits your application's requirements
     store_permanent(constraint_hash, private_key, public_key)
     
@@ -75,7 +76,6 @@ def blind_sign():
     private_key = permanent_entry.private_key
     private_value = temporary_entry.private_value
     blinded_signature = server_sign(private_key, private_value, blinded_message) 
-    blinded_signature = "signed" 
     return jsonify(blinded_signature=blinded_signature)
 
 @app.route('/delete-key', methods=['DELETE'])

@@ -168,7 +168,7 @@ pub(crate) fn generate_e(r: RistrettoPoint, m: &[u8]) -> Scalar
     hasher.update(m);
     let result = hasher.finalize();
     let arr = result.as_slice().try_into().unwrap();
-    Scalar::from_bytes_mod_order_wide(arr)
+    Scalar::from_bytes_mod_order(arr)
 }
 
 /// The requester calculates e' = e / u, where

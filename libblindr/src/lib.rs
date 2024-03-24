@@ -95,7 +95,6 @@ fn prove_message_fits_constraint(constraint: String, transaction: String) -> PyR
     let receipt_bin = bincode::serialize(&receipt).unwrap();
     let receipt_base64 = BASE64_STANDARD.encode(receipt_bin);
     Ok(receipt_base64)
-    
 }
 
 #[pyfunction]

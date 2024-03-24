@@ -25,7 +25,7 @@ members = [
 exclude = ["tools/crates-validator"]
 
 [workspace.package]
-version = "0.21.0-alpha.1"
+version = "0.21.0"
 edition = "2021"
 license = "Apache-2.0"
 homepage = "https://risczero.com/"
