@@ -4,7 +4,7 @@ use hello_world_methods::{MULTIPLY_ID, MULTIPLY_ELF};
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt, sha::Digest};
 use blindr_common::{Transaction, Constraint};
 
-type BlindedMessage = ();
+type BlindedMessage = [u8; 32];
 
 type Hash = [u8; 32];
 
