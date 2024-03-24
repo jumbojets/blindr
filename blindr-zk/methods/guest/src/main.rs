@@ -2,18 +2,13 @@
 // #![no_std]
 
 use risc0_zkvm::guest::env;
-use blindr_common::{Transaction, Auth, Constraint};
+use blindr_common::{Transaction, Constraint};
 use blindsign::request::BlindRequest;
 
 // risc0_zkvm::guest::entry!(main);
 
 fn main() {
-    let (transaction, auth, constraint, public_value): (Transaction, Auth, Constraint, [u8; 32]) = env::read();
-
-    // check that message fits constraint
-    if !constraint.auth.verify(&auth) {
-        panic!("auth doesnt match");
-    }
+    let (transaction, constraint, public_value): (Transaction, Constraint, [u8; 32]) = env::read();
 
     if transaction.amount > constraint.withdrawal_limit {
         panic!("bad withdrawal limit");

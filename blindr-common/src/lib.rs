@@ -20,21 +20,6 @@ impl Transaction {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Auth(pub Vec<(String, String)>);
 
-impl Auth {
-    pub fn from_str(s: &str) -> Self {
-        serde_json::from_str(s).unwrap()
-    }
-
-    pub fn verify(&self, against: &Auth) -> bool {
-        for (name, field) in &self.0 {
-            if !against.0.iter().any(|(a_name, a_field)| a_name == name && a_field == field) {
-                return false;
-            }
-        }
-        true
-    }
-}
-
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Constraint {
     pub auth: Auth,  // must be equal

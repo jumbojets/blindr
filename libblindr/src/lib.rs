@@ -1,6 +1,6 @@
 use pyo3::prelude::*;
 use blindsign::{session::BlindSession, keypair::BlindKeypair, request::BlindRequest, signature::WiredUnblindedSigData};
-use blindr_common::{Transaction, Constraint, Auth};
+use blindr_common::{Transaction, Constraint};
 use std::convert::TryInto;
 use curve25519_dalek::{scalar::Scalar, ristretto::CompressedRistretto};
 use base64::prelude::*;
@@ -88,11 +88,10 @@ fn hash_spend_constraint(constraint: String) -> PyResult<String> {
 }
 
 #[pyfunction]
-fn prove_message_fits_constraint(auth: String, constraint: String, transaction: String) -> PyResult<String> {
-    let auth = Auth::from_str(&auth);
+fn prove_message_fits_constraint(constraint: String, transaction: String) -> PyResult<String> {
     let constraint = Constraint::from_str(&constraint);
     let transaction = Transaction::from_str(&transaction);
-    let (receipt, _, _) = blindr_zk_driver::prove(&transaction, &auth, &constraint);
+    let (receipt, _, _) = blindr_zk_driver::prove(&transaction, &constraint);
     let receipt_bin = bincode::serialize(&receipt).unwrap();
     let receipt_base64 = BASE64_STANDARD.encode(receipt_bin);
     Ok(receipt_base64)

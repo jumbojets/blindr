@@ -1,22 +1,22 @@
 import requests
 from blindr_config import BlindrConfig
-from libblindr import hash_spend_constraint
+from libblindr import hash_spend_constraint, prove_message_fits_constraint, client_new_blind_request, client_verify_signature, client_unblind_signature
 
 
 # def hash_spend_constraint(constraint):
 #     return constraint
 
-def prove_message_fits_constraint(constraint, message):
-    return True
+# def prove_message_fits_constraint(constraint, message):
+#     return True
 
-def client_new_blind_request(message, public_value):
-    return message, "blind_request"
+# def client_new_blind_request(message, public_value):
+#     return message, "blind_request"
 
-def client_unblind_signature(blind_request, blinded_signature):
-    return "signature"
+# def client_unblind_signature(blind_request, blinded_signature):
+#     return "signature"
 
-def client_verify_signature(public_key, signature):
-    return True
+# def client_verify_signature(public_key, signature):
+#     return True
 
 
 class MyAPIClient:
@@ -39,7 +39,8 @@ class MyAPIClient:
         public_value = response.json().get('public_value')
         return {"public_value": public_value, "public_key": public_key, "constraint_hash": constraint_hash}
 
-    def restart_session_with_hash(self, constraint_hash):
+    def restart_session_with_hash(self, constraint):
+        constraint_hash = hash_spend_constraint(constraint)
         response = requests.post(f"{self.config.base_url}/create-sign-session", json={"constraint_hash": constraint_hash})
         response.raise_for_status()
         public_value = response.json().get('public_value')
@@ -49,7 +50,7 @@ class MyAPIClient:
         # Assuming `prove_message_fits_constraint` does some processing and returns a proof object
         proof = prove_message_fits_constraint(constraint, message)
         constraint_hash = hash_spend_constraint(constraint)
-        
+
         # Assuming `client_new_blind_request` returns a tuple (blinded_message, blind_request)
         blinded_message, blind_request = client_new_blind_request(message, public_value)
         
@@ -78,7 +79,8 @@ class MyAPIClient:
         signature = self.sign_message(message, current_session['public_value'], current_session['public_key'], constraint)
         return signature
     
-    def delete_key(self, constraint_hash):
+    def delete_key(self, constraint):
+        constraint_hash = hash_spend_constraint(constraint)
         response = requests.delete(f"{self.config.base_url}/delete-key", json={"constraint_hash": constraint_hash})
         response.raise_for_status()
         return True

@@ -3,7 +3,7 @@ from decouple import config
 from db_connection import setup_db_connection
 from models import PermanentStorage, TemporaryStorage
 from db_methods import store_permanent, store_temporary, delete_temporary, find_permanent, find_temporary, delete_permanent
-from libblindr import server_generate_keypair, server_generate_session, server_sign
+from libblindr import server_generate_keypair, server_generate_session, server_sign, verify_message_fits_constraint
 
 app = Flask(__name__)
 
@@ -69,12 +69,12 @@ def blind_sign():
         return jsonify(error="Constraint hash not found"), 404
     
     # Verify the message fits the constraint
-    # is_valid = verify_message_fits_constraint(proof, blinded_message, constraint_hash)
-    # if not is_valid:
-    #     return jsonify(error="Verification failed"), 400
-    # private_key = permanent_entry.private_key
-    # private_value = temporary_entry.private_value
-    # blinded_signature = server_sign(private_key, private_value, blinded_message) 
+    is_valid = verify_message_fits_constraint(proof, blinded_message, constraint_hash)
+    if not is_valid:
+        return jsonify(error="Verification failed"), 400
+    private_key = permanent_entry.private_key
+    private_value = temporary_entry.private_value
+    blinded_signature = server_sign(private_key, private_value, blinded_message) 
     blinded_signature = "signed" 
     return jsonify(blinded_signature=blinded_signature)
 

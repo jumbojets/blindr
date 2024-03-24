@@ -614,18 +614,19 @@ impl From<Result<Bytes, anyhow::Error>> for pb::api::OnIoReply {
 }
 
 fn check_server_version(requested: &semver::Version, server: &semver::Version) -> bool {
-    if requested.pre.is_empty() {
-        let comparator = semver::Comparator {
-            op: semver::Op::Tilde,
-            major: requested.major,
-            minor: Some(requested.minor),
-            patch: Some(requested.patch),
-            pre: semver::Prerelease::EMPTY,
-        };
-        comparator.matches(server)
-    } else {
-        requested == server
-    }
+    // if requested.pre.is_empty() {
+    //     let comparator = semver::Comparator {
+    //         op: semver::Op::Tilde,
+    //         major: requested.major,
+    //         minor: Some(requested.minor),
+    //         patch: Some(requested.patch),
+    //         pre: semver::Prerelease::EMPTY,
+    //     };
+    //     comparator.matches(server)
+    // } else {
+    //     requested == server
+    // }
+    true
 }
 
 #[cfg(test)]

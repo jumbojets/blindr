@@ -2,17 +2,15 @@
 
 use hello_world_methods::{MULTIPLY_ID, MULTIPLY_ELF};
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt, sha::Digest};
-use blindr_common::{Transaction, Auth, Constraint};
+use blindr_common::{Transaction, Constraint};
 
 type BlindedMessage = ();
 
 type Hash = [u8; 32];
 
-pub fn prove(message: &Transaction, auth: &Auth, constraint: &Constraint) -> (Receipt, BlindedMessage, Hash) {
+pub fn prove(message: &Transaction, constraint: &Constraint) -> (Receipt, BlindedMessage, Hash) {
     let env = ExecutorEnv::builder()
         .write(&message)
-        .unwrap()
-        .write(&auth)
         .unwrap()
         .write(&constraint)
         .unwrap()
