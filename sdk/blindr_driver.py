@@ -44,7 +44,7 @@ constraint = """{
 		["What is your mothers maiden name", "Duke"],
     ["What is your favorite ice cream flavor", "chocolate"]
     ],
-    "withdrawal_lximit" : 10
+    "withdrawal_limit" : 10
 }"""
 
 message = """{

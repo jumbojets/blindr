@@ -172,6 +172,5 @@ impl Cli {
 fn run_server(port: u16) {
     let addr = format!("127.0.0.1:{port}");
     let server = ApiServer::new_tcp(addr);
-    println!("heraer");
     server.run().unwrap()
 }
