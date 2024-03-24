@@ -6,7 +6,7 @@ edition = "2021"
 [workspace]
 
 [dependencies]
-risc0-zkvm = { version = "0.21.0", default-features = false, features = ["std"]}
+risc0-zkvm = { path = "../../../risc0/risc0/zkvm" }
 sha2 = { version = "0.10.6" }
 blindr-common = { path = "../../../blindr-common" }
 blindsign = { path = "../../../blindsign" }
