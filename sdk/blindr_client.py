@@ -1,9 +1,10 @@
 import requests
 from blindr_config import BlindrConfig
-from datetime import datetime
+from libblindr import hash_spend_constraint
 
-def hash_spend_constraint(constraint):
-    return constraint
+
+# def hash_spend_constraint(constraint):
+#     return constraint
 
 def prove_message_fits_constraint(constraint, message):
     return True
@@ -24,6 +25,7 @@ class MyAPIClient:
 
     def create_keys(self, constraint):
         constraint_hash = hash_spend_constraint(constraint)
+        print(constraint_hash)
         response = requests.post(f"{self.config.base_url}/generate-keypair", json={"constraint_hash": constraint_hash})
         response.raise_for_status()  # This will raise an exception for HTTP error responses
         public_key = response.json().get('public_key')
@@ -70,3 +72,13 @@ class MyAPIClient:
             return signature
         else:
             raise Exception("Signature verification failed")
+        
+    def create_session_and_sign(self, message, constraint):
+        current_session = self.create_new_session(constraint)
+        signature = self.sign_message(message, current_session['public_value'], current_session['public_key'], constraint)
+        return signature
+    
+    def delete_key(self, constraint_hash):
+        response = requests.delete(f"{self.config.base_url}/delete-key", json={"constraint_hash": constraint_hash})
+        response.raise_for_status()
+        return True
