@@ -25,7 +25,7 @@ class MyAPIClient:
 
     def create_keys(self, constraint):
         constraint_hash = hash_spend_constraint(constraint)
-        print(constraint_hash)
+        print(f"constraint hash is {constraint_hash}")
         response = requests.post(f"{self.config.base_url}/generate-keypair", json={"constraint_hash": constraint_hash})
         response.raise_for_status()  # This will raise an exception for HTTP error responses
         public_key = response.json().get('public_key')
