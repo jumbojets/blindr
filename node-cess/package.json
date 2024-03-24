@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node tester.js"
+    "start": "node server.js"
   },
   "type": "module",
   "keywords": [],

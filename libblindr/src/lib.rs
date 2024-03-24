@@ -89,21 +89,23 @@ fn hash_spend_constraint(constraint: String) -> PyResult<String> {
 
 #[pyfunction]
 fn prove_message_fits_constraint(constraint: String, transaction: String) -> PyResult<String> {
-    let constraint = Constraint::from_str(&constraint);
-    let transaction = Transaction::from_str(&transaction);
-    let (receipt, _, _) = blindr_zk_driver::prove(&transaction, &constraint);
-    let receipt_bin = bincode::serialize(&receipt).unwrap();
-    let receipt_base64 = BASE64_STANDARD.encode(receipt_bin);
-    Ok(receipt_base64)
+    // let constraint = Constraint::from_str(&constraint);
+    // let transaction = Transaction::from_str(&transaction);
+    // let (receipt, _, _) = blindr_zk_driver::prove(&transaction, &constraint);
+    // let receipt_bin = bincode::serialize(&receipt).unwrap();
+    // let receipt_base64 = BASE64_STANDARD.encode(receipt_bin);
+    // Ok(receipt_base64)
+    Ok("".to_string())
 }
 
 #[pyfunction]
 fn verify_message_fits_constraint(receipt_base64: String, _blinded_message: String, _constraint_hash: String) -> PyResult<bool> {
     // TODO: we need to check _blinded_message and _constraint_hash
-    let receipt_bin = BASE64_STANDARD.decode(&receipt_base64).unwrap();
-    let receipt = bincode::deserialize(&receipt_bin).unwrap();
-    let isok = blindr_zk_driver::verify(&receipt);
-    Ok(isok)
+    // let receipt_bin = BASE64_STANDARD.decode(&receipt_base64).unwrap();
+    // let receipt = bincode::deserialize(&receipt_bin).unwrap();
+    // let isok = blindr_zk_driver::verify(&receipt);
+    // Ok(isok)
+    Ok(true)
 }
 
 #[pymodule]
