@@ -3,11 +3,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { InitAPI, Space, Bucket, File, testnetConfig } from 'cess-js-sdk';
 import os from 'os';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 
 const app = express();
-const port = 3000; // You can choose any port that suits your setup
+const port = 9000; // You can choose any port that suits your setup
 
 app.use(bodyParser.json());
 
@@ -19,28 +19,13 @@ const BUCKET_NAME = "test2"; // bucket name
 // Initialize CESS SDK
 async function initializeCESS() {
     const { api, keyring } = await InitAPI(testnetConfig);
-    const space = new Space(api, keyring);
-    const common = new Common(api, keyring);
-    const bucket = new Bucket(api, keyring);
     const file = new File(api, keyring, testnetConfig.gatewayURL);
   
-    console.log("API initialized.");
-  
-    const [chain, nodeName, nodeVersion] = await Promise.all([
-      api.rpc.system.chain(),
-      api.rpc.system.name(),
-      api.rpc.system.version(),
-    ]);
-    console.log(`Connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
-  
-    const balanceEncoded = await api.query.system.account(acctId);
-    const { data } = balanceEncoded.toJSON();
-    console.log(`User: ${acctId}, balance:`, BigInt(data.free));
     return { api, keyring, file };
 }
 
 // Example endpoint for uploading files to CESS
-app.post('/upload', async (req, res) => {
+app.post('/upload-file', async (req, res) => {
     const { api, keyring, file } = await initializeCESS();
 
     const privateVal = req.body.private;
@@ -48,11 +33,13 @@ app.post('/upload', async (req, res) => {
 
     // Create the file content
     const fileContent = JSON.stringify({ private: privateVal, public: publicVal });
+    console.log("File content:", fileContent);
 
     try {
         // Generate a temporary file path
         const tempDir = os.tmpdir();
         const filePath = path.join(tempDir, `upload_${Date.now()}.json`);
+        console.log("Temporary file path:", filePath);
 
         // Write the content to the temporary file
         await fs.writeFile(filePath, fileContent);
@@ -72,7 +59,7 @@ app.post('/upload', async (req, res) => {
     }
 });
 
-app.get('/download/:fileHash', async (req, res) => {
+app.get('/download-file/:fileHash', async (req, res) => {
     const { fileHash } = req.params;
     const { api, keyring, file } = await initializeCESS();
     // Generate a temporary file path
@@ -115,6 +102,7 @@ app.get('/download/:fileHash', async (req, res) => {
 // Delete file endpoint
 app.delete('/delete-file/:fileHash', async (req, res) => {
     const { fileHash } = req.params; // Get the fileHash from the URL parameter
+    console.log("file hash to delete is: ", fileHash)
     const { api, keyring, file } = await initializeCESS();
 
     try {

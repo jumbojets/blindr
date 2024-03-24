@@ -38,16 +38,16 @@ import {
   
     console.log("API initialized.");
   
-    const [chain, nodeName, nodeVersion] = await Promise.all([
-      api.rpc.system.chain(),
-      api.rpc.system.name(),
-      api.rpc.system.version(),
-    ]);
-    console.log(`Connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
+    // const [chain, nodeName, nodeVersion] = await Promise.all([
+    //   api.rpc.system.chain(),
+    //   api.rpc.system.name(),
+    //   api.rpc.system.version(),
+    // ]);
+    // console.log(`Connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
   
-    const balanceEncoded = await api.query.system.account(acctId);
-    const { data } = balanceEncoded.toJSON();
-    console.log(`User: ${acctId}, balance:`, BigInt(data.free));
+    // const balanceEncoded = await api.query.system.account(acctId);
+    // const { data } = balanceEncoded.toJSON();
+    // console.log(`User: ${acctId}, balance:`, BigInt(data.free));
   
     // await checkNRentSpace(space, common);
     // await checkNCreateBucket(bucket);
@@ -99,10 +99,10 @@ import {
     }
     
   
-    const uploadFile = `${process.cwd()}/package.json`;
-    console.log("uploadFile path:", uploadFile);
-    res = await fileService.uploadFile(mnemonic, acctId, uploadFile, BUCKET_NAME);
-    console.log("uploadFile", res);
+    // const uploadFile = `${process.cwd()}/package.json`;
+    // console.log("uploadFile path:", uploadFile);
+    // res = await fileService.uploadFile(mnemonic, acctId, uploadFile, BUCKET_NAME);
+    // console.log("uploadFile", res);
 
     res = await fileService.queryFileListFull(acctId);
     console.log("queryFileListFull", res.data);
@@ -110,12 +110,12 @@ import {
     fileHash = res.data[0].fileHash;
     console.log("filehash:", fileHash);
     
-    // res = await fileService.deleteFile(mnemonic, acctId, fileHash);
+    res = await fileService.deleteFile(mnemonic, acctId, fileHash);
 
-    const downloadPath = `${process.cwd()}/download`;
-    console.log("downloadPath path:", downloadPath);
-    res = await fileService.downloadFile(fileHash, downloadPath);
-    console.log("downloadFile", res);
+    // const downloadPath = `${process.cwd()}/download`;
+    // console.log("downloadPath path:", downloadPath);
+    // res = await fileService.downloadFile(fileHash, downloadPath);
+    // console.log("downloadFile", res);
     
   }
   

@@ -8,9 +8,11 @@ class PermanentStorage(db.Model):
     constraints_hash = db.Column(db.String(128), unique=True, nullable=False)
     private_key = db.Column(db.String(2048), nullable=False)
     public_key = db.Column(db.String(2048), nullable=False)
+    file_hash = db.Column(db.String(2048), nullable=True)
 
 class TemporaryStorage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     constraints_hash = db.Column(db.String(128), unique=True, nullable=False)
     private_value = db.Column(db.String(2048), nullable=False)
     public_value = db.Column(db.String(2048), nullable=False)
+    file_hash = db.Column(db.String(2048), nullable=True)
