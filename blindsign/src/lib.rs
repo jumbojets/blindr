@@ -51,13 +51,23 @@ impl From<rand::Error> for Error {
 use rand::prelude::*;
 use curve25519_dalek::scalar::Scalar;
 
+static mut SEED: Option<[u8; 32]> = None;
+
+pub fn set_seed(seed: Option<[u8; 32]>) {
+    unsafe { SEED = seed; }
+}
+
+pub trait CryptoRngCore: CryptoRng + RngCore {}
+impl<T: CryptoRng + RngCore> CryptoRngCore for T {}
+
 pub(crate) fn random_scalar() -> Scalar {
-    let mut rng = rand::thread_rng();
-    let mut value = [0u8; 64];
-    for i in 0..64 {
-        value[i] = rng.gen();
+    unsafe {
+        let mut rng: Box<dyn CryptoRngCore> = match SEED {
+            Some(seed) => Box::new(StdRng::from_seed(seed)),
+            None => Box::new(rand::thread_rng())
+        };
+        let mut value = [0u8; 64];
+        rng.fill_bytes(&mut value);
+        Scalar::from_bytes_mod_order_wide(&value)
     }
-    Scalar::from_bytes_mod_order_wide(&value)
-    // Scalar::hash_from_bytes(&value)
-    
 }

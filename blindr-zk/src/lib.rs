@@ -6,13 +6,15 @@ use blindr_common::{Transaction, Constraint};
 
 type Bytes32 = [u8; 32];
 
-pub fn prove(message: &Transaction, constraint: &Constraint, public_value: &Bytes32) -> Receipt {
+pub fn prove(message: &Transaction, constraint: &Constraint, public_value: &Bytes32, blind_seed: &Bytes32) -> Receipt {
     let env = ExecutorEnv::builder()
         .write(message)
         .unwrap()
         .write(constraint)
         .unwrap()
         .write(public_value)
+        .unwrap()
+        .write(blind_seed)
         .unwrap()
         .build()
         .unwrap();

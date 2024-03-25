@@ -16,6 +16,6 @@
 - risc0: fork that works with python (pyo3) and fixes a couple bugs
 
 ### TODO
-- [ ] in the zkvm, the new request function should not take use values (need to be from previously generated request). this currently creates valid proof error
+- [x] in the zkvm, the new request function should not take use values (need to be from previously generated request). this currently creates valid proof error
 - [x] verifier needs to corroborate the proof's public journal with client-provided blinded signature value and constraint hash
 - [ ] HARD: make non-dev-mode fast

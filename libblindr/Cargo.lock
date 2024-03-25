@@ -904,6 +904,7 @@ dependencies = [
  "hex",
  "pyo3",
  "pyo3-build-config",
+ "rand",
 ]
 
 [[package]]

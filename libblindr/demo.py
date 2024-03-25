@@ -35,7 +35,7 @@ transaction = """{
 }"""
 
 blinded_transaction, request = bl.client_new_blind_request(transaction, server_pv)
-proof = bl.prove_message_fits_constraint(constraint, transaction, server_pv)
+proof = bl.prove_message_fits_constraint(request, constraint, transaction, server_pv)
 
 # server verifies the proof of transaction validity of constraint hash and then blindly signs the message
 

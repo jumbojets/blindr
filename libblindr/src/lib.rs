@@ -4,6 +4,7 @@ use blindr_common::{Transaction, Constraint};
 use std::convert::TryInto;
 use curve25519_dalek::{scalar::Scalar, ristretto::CompressedRistretto};
 use base64::prelude::*;
+use rand::RngCore;
 
 #[pyfunction]
 fn server_generate_keypair() -> PyResult<(String, String)> {
@@ -25,7 +26,10 @@ fn server_generate_session() -> PyResult<(String, String)> {
 }
 
 #[pyclass]
-pub struct PyBlindRequest(BlindRequest);
+pub struct PyBlindRequest{
+    request: BlindRequest,
+    seed: [u8; 32],
+}
 
 #[pyfunction]
 fn client_new_blind_request(transaction: String, public_value_hex: String) -> PyResult<(String, PyBlindRequest)> {
@@ -33,9 +37,15 @@ fn client_new_blind_request(transaction: String, public_value_hex: String) -> Py
     let public_value = hex::decode(public_value_hex).unwrap().try_into().unwrap();
     
     // return blinded_message and blind_request
+    let mut rng = rand::thread_rng();
+    let mut seed = [0u8; 32];
+    rng.fill_bytes(&mut seed);
+    blindsign::set_seed(Some(seed));
     let (blinded_message, blind_request) = BlindRequest::new_specific_msg(&public_value, &message).unwrap();
+    blindsign::set_seed(None);
+
     let blinded_message_hex = hex::encode(blinded_message);
-    let blind_request_py = PyBlindRequest(blind_request);
+    let blind_request_py = PyBlindRequest { request: blind_request, seed };
     Ok((blinded_message_hex, blind_request_py))
 }
 
@@ -60,7 +70,7 @@ fn server_sign(private_key_hex: String, private_value_hex: String, blinded_messa
 fn client_unblind_signature(blind_request: PyRef<PyBlindRequest>, blinded_signature_hex: String) -> PyResult<String> {
     let blinded_signature_bytes = hex::decode(blinded_signature_hex).unwrap().try_into().unwrap();
 
-    let unblinded_sig_msg = blind_request.0.gen_signed_msg(&blinded_signature_bytes).unwrap();
+    let unblinded_sig_msg = blind_request.request.gen_signed_msg(&blinded_signature_bytes).unwrap();
     let unblinded_sig_bytes = WiredUnblindedSigData::from(unblinded_sig_msg).to_bytes();
     let unblinded_sig_hex = hex::encode(unblinded_sig_bytes);
 
@@ -88,11 +98,11 @@ fn hash_spend_constraint(constraint: String) -> PyResult<String> {
 }
 
 #[pyfunction]
-fn prove_message_fits_constraint(constraint: String, transaction: String, public_value_hex: String) -> PyResult<String> {
+fn prove_message_fits_constraint(request: PyRef<PyBlindRequest>, constraint: String, transaction: String, public_value_hex: String) -> PyResult<String> {
     let constraint = Constraint::from_str(&constraint);
     let transaction = Transaction::from_str(&transaction);
     let public_value = hex::decode(public_value_hex).unwrap().try_into().unwrap();
-    let receipt = blindr_zk_driver::prove(&transaction, &constraint, &public_value);
+    let receipt = blindr_zk_driver::prove(&transaction, &constraint, &public_value, &request.seed);
     let receipt_bin = bincode::serialize(&receipt).unwrap();
     let receipt_base64 = BASE64_STANDARD.encode(receipt_bin);
     Ok(receipt_base64)

@@ -8,7 +8,7 @@ use blindsign::request::BlindRequest;
 // risc0_zkvm::guest::entry!(main);
 
 fn main() {
-    let (transaction, constraint, public_value): (Transaction, Constraint, [u8; 32]) = env::read();
+    let (transaction, constraint, public_value, blind_seed): (Transaction, Constraint, _, _) = env::read();
 
     if transaction.amount > constraint.withdrawal_limit {
         panic!("bad withdrawal limit");
@@ -16,7 +16,10 @@ fn main() {
 
     // compute the blinded_message
     let message = transaction.message();
+
+    blindsign::set_seed(Some(blind_seed));
     let (blinded_message, _) = BlindRequest::new_specific_msg(&public_value, &message).unwrap();
+    blindsign::set_seed(None);
 
     // hash the constraint
     let hashed_constraint = constraint.hash();

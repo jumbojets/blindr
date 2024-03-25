@@ -14,6 +14,7 @@ blindr-common = { path = "../blindr-common" }
 blindr-zk-driver = { path = "../blindr-zk" }
 bincode = "*"
 base64 = "0.22.0"
+rand = "*"
 
 [dependencies.pyo3]
 version = "0.20"
