@@ -8,11 +8,13 @@ type BlindedMessage = [u8; 32];
 
 type Hash = [u8; 32];
 
-pub fn prove(message: &Transaction, constraint: &Constraint) -> (Receipt, BlindedMessage, Hash) {
+pub fn prove(message: &Transaction, constraint: &Constraint, public_value: &[u8; 32]) -> (Receipt, BlindedMessage, Hash) {
     let env = ExecutorEnv::builder()
-        .write(&message)
+        .write(message)
         .unwrap()
-        .write(&constraint)
+        .write(constraint)
+        .unwrap()
+        .write(public_value)
         .unwrap()
         .build()
         .unwrap();

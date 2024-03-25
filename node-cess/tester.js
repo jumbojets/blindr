@@ -23,7 +23,7 @@ import {
   
   // The well-known account of Substrate:
   //   https://github.com/substrate-developer-hub/substrate-developer-hub.github.io/issues/613
-  const mnemonic = "bottom drive obey lake curtain smoke basket hold race lonely fit walk";
+  const mnemonic = "bottom drive obey lake curtain smoke basket hold race lonely fit wall";
   const acctId = "cXgaee2N8E77JJv9gdsGAckv1Qsf3hqWYf7NL4q6ZuQzuAUtB";
   
   const RENT_SPACE = 1; // unit in GB.
