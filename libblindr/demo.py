@@ -39,8 +39,6 @@ proof = bl.prove_message_fits_constraint(constraint, transaction, server_pv)
 
 # server verifies the proof of transaction validity of constraint hash and then blindly signs the message
 
-
-
 is_valid_proof = bl.verify_message_fits_constraint(proof, blinded_transaction, contraint_hash)
 assert(is_valid_proof)
 
