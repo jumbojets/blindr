@@ -1,5 +1,9 @@
 # blindr
 
+proof-of-concept of [blind signing](https://en.wikipedia.org/wiki/Blind_signature) a message whose blinded message fit a certain set of constraints. uses a [zero-knowledge proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof) to prove to the signer such constraints are met. check [`libblindr/demo.py`](https://github.com/jumbojets/blindr/blob/master/libblindr/demo.py) for a straightforward workflow demo.
+
+this repository also inclues code to set up up a signing server and an sdk to interact with said server.
+
 ## the repository
 
 ### our code
